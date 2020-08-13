@@ -3,11 +3,18 @@ package io.github.giuliopft.telegramlogin;
 import org.bukkit.ChatColor;
 
 public class Utils {
-    public static String applyPlaceholders(String string) {
-        return string.replace("{prefix}", TelegramLogin.getInstance().getLanguageConfig().getString("prefix"));
+
+    private final TelegramLogin telegramLogin;
+
+    public Utils(TelegramLogin telegramLogin) {
+        this.telegramLogin = telegramLogin;
     }
 
-    public static String getTranslatedString(String path) {
-        return ChatColor.translateAlternateColorCodes('&', applyPlaceholders(TelegramLogin.getInstance().getLanguageConfig().getString(path)));
+    public String applyPlaceholders(String string) {
+        return string.replace("{prefix}", telegramLogin.getLanguageConfig().getString("prefix"));
+    }
+
+    public String getTranslatedString(String path) {
+        return ChatColor.translateAlternateColorCodes('&', applyPlaceholders(telegramLogin.getLanguageConfig().getString(path)));
     }
 }
