@@ -1,0 +1,15 @@
+language: en
+
+bot:
+  token: '' #Insert the token of your bot here. It'll probably look like this: 1234567890:ABCDEfghij12345klmno67890PQRSTuvwxy
+  username: '' #Insert the username of your bot (WITHOUT @) here.
+
+login:
+  force-login-for-every-player: true #If this is set to true, every player will be required to use Telegram in order to join the server.
+  use-uuids: true #Ignored if force-login-for-every-player is set to true. Used for the list below.
+  force-login-on-players: #Ignored if force-login-for-every-player is set to true. These are the players who will always be required
+    #to login with Telegram, stored in UUID format if use-uuids is set to true. If you don't know how to get
+    #a player's UUID or your server is in offline-mode (i.e. players who have not bought Minecraft can join, too),
+    #you should set use-uuids to false and enter players by their username.
+    - 'c02e9952-a62e-49f1-b46a-c62669a055da'
+    - 'b7b595cf-347b-4690-a75d-36d455f92268'

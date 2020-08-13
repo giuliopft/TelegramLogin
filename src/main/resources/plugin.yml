@@ -1,0 +1,8 @@
+name: TelegramLogin
+version: ${project.version}
+main: io.github.giuliopft.telegramlogin.TelegramLogin
+api-version: '1.13'
+load: STARTUP
+authors: [giuliopft]
+description: This plugin forces player to interact with a Telegram bot in order to join a server.
+website: giuliopft.github.io/telegramlogin
