@@ -5,23 +5,28 @@ bot:
   username: '' #Insert the username of your bot (WITHOUT @) here.
 
 login:
-  force-login: true #If this is set to true, every player will be required to use Telegram in order to join the server.
+  force-login: false #If this is set to true, every player will be required to use Telegram in order to join the server.
   use-uuids: true #Ignored if force-login is set to true. Used for force-login-exceptions.
-  force-login-exceptions: #Ignored if force-login is set to true. These are the players who will always be required to login with
-    #Telegram. They are stored in UUID format if use-uuids is set to true. If you don't know how to get a player's UUID or your server
-    #is in offline-mode (i.e. players who have not bought Minecraft can join, too), you should set use-uuids to false and enter players
-    #by their Minecraft nickname.
+  force-login-exceptions: #Ignored if force-login is set to true. These are the players who will always be required to
+    #login with Telegram. They are stored in UUID format if use-uuids is set to true. If you don't know how to get a
+    #player's UUID or your server is in offline-mode (i.e. players who have not bought Minecraft can join, too), you
+    #should set use-uuids to false and enter players by their Minecraft nickname.
+    #This feature may be useful for an extra layer of security for staff members.
     - 'c02e9952-a62e-49f1-b46a-c62669a055da'
     - 'b7b595cf-347b-4690-a75d-36d455f92268'
-  allow-multiple-accounts: true #If this is set to false, no one will be able to register more than one Minecraft account with the same
-  #Telegram profile.
-  allow-multiple-accounts-exceptions: #Ignored if allow-multiple-accounts is set to true. These Telegram profiles will be able to
-    #register more than one Minecraft account. YOU MAY NOT ENTER TELEGRAM USERNAMES. YOU MUST ENTER
+  force-new-players-to-login: true #Ignored if force-login is set to true. If this is set to true, Telegram verification
+  #will be needed in order to join the server with any new account; nevertheless, players in force-login-exceptions will
+  #still be required to login with Telegram even if they aren't new.
+  allow-multiple-accounts: false #If this is set to false, no one will be able to register more than one Minecraft account
+  #with the same Telegram profile.
+  allow-multiple-accounts-exceptions: #Ignored if allow-multiple-accounts is set to true. These Telegram profiles will
+    #be able to register more than one Minecraft account. YOU MAY NOT ENTER TELEGRAM USERNAMES. YOU MUST ENTER
     #TELEGRAM NUMERIC IDs. If you don't know how to get your, or somebody else's, numeric ID, you can
     #use @CreationDateBot. For example, if you want to know my ID, given that my Telegram username
     #is @giuliopft, just send @giuliopft to this bot and it'll tell you that my ID is 173038429.
     - 173038429
     - 379379251
+  idle-time: 180 #How many seconds should the plugin wait before kicking players who have not completed the verification?
 
-debug: true #Normally, this should be set to false. If you're experiencing unexpected behaviour, set this to true and send your log to
-#the developer through GitHub issues (https://github.com/giuliopft/TelegramLogin) or Telegram (https://t.me/giuliopft).
+debug: true #Normally, this should be set to false. If you're experiencing unexpected behaviour, set this to true and send your
+#log to the developer through GitHub issues (https://github.com/giuliopft/TelegramLogin) or Telegram (https://t.me/giuliopft).

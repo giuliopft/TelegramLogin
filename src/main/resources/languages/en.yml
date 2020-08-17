@@ -1,1 +1,2 @@
 prefix: '&3[TelegramLogin]'
+kick-message: '&3[TelegramLogin]\n&7You have been kicked for not having completed the verification!' #Use \n to add new lines
