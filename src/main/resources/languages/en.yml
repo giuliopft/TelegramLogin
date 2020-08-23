@@ -1,2 +1,13 @@
 prefix: '&3[TelegramLogin]'
-kick-message: '&3[TelegramLogin]\n&7You have been kicked for not having completed the verification!' #Use \n to add new lines
+
+minecraft:
+  new-user: '&3[TelegramLogin]&7 Hi %player%! In order to join this server, you have to complete a verification with Telegram.
+    Start @%bot-username% and send the following command to the bot: &3&o%command%&7.'
+  kick-message: '&3[TelegramLogin]\n&7You have been kicked for not having completed the verification!' #Use \n to add new lines
+
+telegram: #You may use HTML tags and \n in each of the following messages
+  start: 'Hi! I''m a Telegram bot. Follow the instructions you see in the chat in Minecraft. Do not stop or block me, or you
+    won''t be able to join the server again!'
+  successful-registration: 'You have successfully registered <b>%player%</b>.'
+  multiple-accounts: 'You have too many Minecraft accounts linked to this Telegram profile!'
+  error: 'Invalid command, please retry.'

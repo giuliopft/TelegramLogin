@@ -15,5 +15,6 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         telegramLogin.getPlayersAwaitingVerification().remove(event.getPlayer());
+        telegramLogin.getNewPlayers().values().remove(event.getPlayer());
     }
 }

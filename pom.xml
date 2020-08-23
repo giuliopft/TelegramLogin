@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.giuliopft</groupId>
-    <artifactId>telegramlogin</artifactId>
+    <artifactId>TelegramLogin</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
@@ -42,6 +42,72 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.glassfish</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.org.glassfish
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.org.apache
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.telegram</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.org.telegram
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.jvnet</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.org.jvnet
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.json</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.org.json
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.slf4j</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.org.slf4j
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.aopalliance</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.org.aopalliance
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.google</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.com.google
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.fasterxml</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.com.fasterxml
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.sun</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.com.sun
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>javassist</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.javassist
+                                    </shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>jersey</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.jersey</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>mozilla</pattern>
+                                    <shadedPattern>io.github.giuliopft.telegramlogin.dependencies.mozilla
+                                    </shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>

@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 
 public class PlayerJoinListener implements Listener {
     private final TelegramLogin telegramLogin;
@@ -35,7 +36,7 @@ public class PlayerJoinListener implements Listener {
         telegramLogin.debug(event.getPlayer().getName() + "is " + (isNew ? "" : "not") + " new");
         boolean forceNew = telegramLogin.getConfig().getBoolean("login.force-new-players-to-login");
 
-        if (!forceLogin && !isForceLoginException && (!isNew || !forceNew)) {
+        if (!forceLogin && !isForceLoginException && !(isNew && forceNew)) {
             return;
         }
 
@@ -44,13 +45,19 @@ public class PlayerJoinListener implements Listener {
             @Override
             public void run() {
                 if (telegramLogin.getPlayersAwaitingVerification().contains(event.getPlayer())) {
-                    event.getPlayer().kickPlayer(telegramLogin.getTranslatedString("kick-message"));
+                    event.getPlayer().kickPlayer(telegramLogin.getTranslatedString("minecraft.kick-message"));
                 }
             }
         }.runTaskLater(telegramLogin, telegramLogin.getConfig().getInt("login.idle-time") * 20);
 
         if (isNew) {
-            //Tell the player to start the bot
+            int password = new Random().nextInt(Integer.MAX_VALUE);
+            telegramLogin.getNewPlayers().put(password, event.getPlayer());
+            telegramLogin.debug(event.getPlayer().getName() + "'s password is " + password);
+            event.getPlayer().sendMessage(telegramLogin.getTranslatedString("minecraft.new-user")
+                    .replace("%player%", event.getPlayer().getName())
+                    .replace("%bot-username%", telegramLogin.getConfig().getString("username"))
+                    .replace("%command%", "/r " + password));
         } else {
             int id = 0;
             try {
@@ -60,7 +67,7 @@ public class PlayerJoinListener implements Listener {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            //Send login message to id
+            //TODO Send message through the bot (async)
         }
     }
 }
