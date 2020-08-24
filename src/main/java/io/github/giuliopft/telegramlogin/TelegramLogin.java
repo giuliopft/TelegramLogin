@@ -14,9 +14,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,13 +62,7 @@ public final class TelegramLogin extends JavaPlugin {
                 new PlayerRegisterListener(this));
 
         if (!getConfig().getString("bot.username").isEmpty() && !getConfig().getString("bot.token").isEmpty()) {
-            ApiContextInitializer.init();
-            bot = new Bot(this, getConfig().getString("bot.username"), getConfig().getString("bot.token"));
-            try {
-                new TelegramBotsApi().registerBot(bot);
-            } catch (TelegramApiRequestException e) {
-                e.printStackTrace();
-            }
+            bot = new Bot(this, getConfig().getString("bot.token"));
         }
 
         debug("onEnable() completed");

@@ -1,64 +1,48 @@
 package io.github.giuliopft.telegramlogin.bot;
 
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.Chat;
+import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.ParseMode;
+import com.pengrad.telegrambot.request.SendMessage;
 import io.github.giuliopft.telegramlogin.TelegramLogin;
 import io.github.giuliopft.telegramlogin.events.PlayerRegisterEvent;
 import org.bukkit.Bukkit;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public class Bot extends TelegramLongPollingBot {
+public class Bot extends TelegramBot {
     private final TelegramLogin telegramLogin;
-    private final String username;
-    private final String token;
 
-    public Bot(TelegramLogin telegramLogin, String username, String token) {
+    public Bot(TelegramLogin telegramLogin, String token) {
+        super(token);
         this.telegramLogin = telegramLogin;
-        this.username = username;
-        this.token = token;
-    }
-
-    @Override
-    public String getBotUsername() {
-        return username;
-    }
-
-    @Override
-    public String getBotToken() {
-        return token;
-    }
-
-    @Override
-    public void onUpdateReceived(Update update) {
-        if (update.hasMessage()) {
-            if (!update.getMessage().isUserMessage()) {
-                return;
+        setUpdatesListener(updates -> {
+            for (Update update : updates) {
+                if (update.message() != null) {
+                    if (update.message().chat().type() != Chat.Type.Private) {
+                        continue;
+                    }
+                    telegramLogin.debug(update.message().from().id() + " has just sent this message to the bot: " + update.message().text());
+                    switch (update.message().text().toLowerCase().split(" ")[0]) {
+                        case ".start":
+                        case "/start":
+                            onStart(update.message().chat().id());
+                            break;
+                        case ".r":
+                        case "/r":
+                            onR(update.message().chat().id(), update.message().text());
+                            break;
+                    }
+                }
             }
-            telegramLogin.debug(update.getMessage().getFrom().getId() + " has just sent this message to the bot: " + update.getMessage().getText());
-            switch (update.getMessage().getText().toLowerCase().split(" ")[0]) {
-                case ".start":
-                case "/start":
-                    onStart(update.getMessage().getChatId());
-                    break;
-                case ".r":
-                case "/r":
-                    onR(update.getMessage().getChatId(), update.getMessage().getText());
-                    break;
-            }
-        }
+            return UpdatesListener.CONFIRMED_UPDATES_ALL;
+        });
     }
 
     private void onStart(long chatId) {
-        try {
-            execute(new SendMessage()
-                    .setChatId(chatId)
-                    .enableHtml(true)
-                    .disableWebPagePreview()
-                    .setText(telegramLogin.getTranslatedString("telegram.start")));
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        execute(new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.start"))
+                .parseMode(ParseMode.HTML)
+                .disableWebPagePreview(true));
     }
 
     private void onR(long chatId, String text) {
@@ -68,23 +52,18 @@ public class Bot extends TelegramLongPollingBot {
             if (event.getState() == PlayerRegisterEvent.State.WRONG_PASSWORD) {
                 error(chatId);
             } else {
-                SendMessage sendMessage = new SendMessage()
-                        .setChatId(chatId)
-                        .enableHtml(true)
-                        .disableWebPagePreview();
+                SendMessage sendMessage = null;
                 switch (event.getState()) {
                     case SUCCESSFUL:
-                        sendMessage.setText(telegramLogin.getTranslatedString("telegram.successful-registration").replace("%player%", event.getPlayer().getName()));
+                        sendMessage = new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.successful-registration")
+                                .replace("%player%", event.getPlayer().getName())).parseMode(ParseMode.HTML).disableWebPagePreview(true);
                         break;
                     case MULTIPLE_ACCOUNTS:
-                        sendMessage.setText(telegramLogin.getTranslatedString("telegram.multiple-accounts"));
+                        sendMessage = new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.multiple-accounts"))
+                                .parseMode(ParseMode.HTML).disableWebPagePreview(true);
                         break;
                 }
-                try {
-                    execute(sendMessage);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+                execute(sendMessage);
             }
         } else {
             error(chatId);
@@ -92,14 +71,8 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void error(long chatId) {
-        try {
-            execute(new SendMessage()
-                    .setChatId(chatId)
-                    .enableHtml(true)
-                    .disableWebPagePreview()
-                    .setText(telegramLogin.getTranslatedString("telegram.error")));
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        execute(new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.error"))
+                .parseMode(ParseMode.HTML)
+                .disableWebPagePreview(true));
     }
 }
