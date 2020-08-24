@@ -1,13 +1,23 @@
 prefix: '&3[TelegramLogin]'
 
 minecraft:
-  new-user: '&3[TelegramLogin]&7 Hi %player%! In order to join this server, you have to complete a verification with Telegram.
-    Start @%bot-username% and send the following command to the bot: &3&o%command%&7.'
-  kick-message: '&3[TelegramLogin]\n&7You have been kicked for not having completed the verification!' #Use \n to add new lines
+  new-user: '%prefix%Hi %player%! In order to join this server, you have to complete a verification with Telegram. Start @%bot-username% and send the following command to the bot: &3&o%command%&7.'
+  login: '%prefix%Hi %player%! We''ve just sent a message to your Telegram account to make sure it''s you trying to log in.'
+  successful: '%prefix%Authentication complete. You can now play on the server.'
+  you-cannot-move: '%prefix%You can''t do this before authenticating with Telegram!'
+  kick-message-too-much-time: '%prefix%\n&7You have been kicked for not having completed the verification!' #Use \n to add new lines
+  kick-message-it-is-not-you: '%prefix%\n&7You don''t own this Minecraft account!' #Use \n to add new lines
+  kick-message-multiple-accounts: '%prefix%\n&7You already have a Minecraft account linked to your Telegram profile!' #Use \n to add new lines
 
 telegram: #You may use HTML tags and \n in each of the following messages
-  start: 'Hi! I''m a Telegram bot. Follow the instructions you see in the chat in Minecraft. Do not stop or block me, or you
-    won''t be able to join the server again!'
+  start: 'Hi! I''m a Telegram bot. Follow the instructions you see in the chat in Minecraft. Do not stop or block me, or you won''t be able to join the server again!'
   successful-registration: 'You have successfully registered <b>%player%</b>.'
+  successful-authentication: 'Authentication complete.'
+  unsuccessful-authentication: 'The player attempting to join the server with your account has been kicked.'
   multiple-accounts: 'You have too many Minecraft accounts linked to this Telegram profile!'
+  login:
+    message: 'Hi! Someone is trying to join the server with your account %player%. Is this you?'
+    buttons:
+      yes: '👍 Yes, it is me'
+      no: '👎 No, it is not me'
   error: 'Invalid command, please retry.'

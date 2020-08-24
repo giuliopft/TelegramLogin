@@ -1,13 +1,23 @@
 prefix: '&3[TelegramLogin]'
 
 minecraft:
-  new-user: '&3[TelegramLogin]&7 Ciao %player%! Per entrare su questo server, è necessario che tu completi una verifica con
-    Telegram. Avvia @%bot-username% e digita il seguente comando sul bot: &3&o%command%&7.'
-  kick-message: '&3[TelegramLogin]\n&7Sei stato espulso per non aver completato la verifica!' #Usa \n per aggiungere altre righe
+  new-user: '%prefix%Ciao %player%! Per entrare su questo server, è necessario che tu completi una verifica con Telegram. Avvia @%bot-username% e digita il seguente comando sul bot: &3&o%command%&7.'
+  login: '%prefix%Ciao %player%! Ti è appena stato mandato un messaggio su Telegram per verificare che sia veramente tu.'
+  successful: '%prefix%Autenticazione completata. Puoi ora giocare liberamente sul server.'
+  you-cannot-move: '%prefix%Non puoi fare questo prima di autenticarti con Telegram!'
+  kick-message-too-much-time: '%prefix%\n&7Sei stato espulso per non aver completato la verifica!' #Usa \n per aggiungere altre righe
+  kick-message-it-is-not-you: '%prefix%\n&7Non sei il proprietario di questo account!' #Usa \n per aggiungere altre righe
+  kick-message-multiple-accounts: '%prefix%\n&7Hai già un account Minecraft collegato al tuo profilo Telegram!' #Usa \n per aggiungere altre righe
 
 telegram:  #Puoi usare i tag HTML e \n in tutti i seguenti messaggi
-  start: 'Ciao! Sono un bot di Telegram. Segui le istruzioni che compaiono sulla chat di Minecraft. Non arrestarmi o bloccarmi,
-    o non potrai più entrare sul server!'
+  start: 'Ciao! Sono un bot di Telegram. Segui le istruzioni che compaiono sulla chat di Minecraft. Non arrestarmi o bloccarmi, o non potrai più entrare sul server!'
   successful-registration: 'Hai registrato con successo l''utenza <b>%player%</b>.'
+  successful-authentication: 'Autenticazione completata.'
+  unsuccessful-authentication: 'Il giocatore che tentava di entrare con il tuo account è stato espulso.'
   multiple-accounts: 'Hai troppi account Minecraft collegati a questo profilo Telegram!'
+  login:
+    message: 'Ciao! Qualcuno sta tentando di entrare nel server con il tuo account %player%. Sei tu?'
+    buttons:
+      yes: '👍 Sì, sono io'
+      no: '👎 No, non sono io'
   error: 'Comando non valido; per piacere, riprova.'

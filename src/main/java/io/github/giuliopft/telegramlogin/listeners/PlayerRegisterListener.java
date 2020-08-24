@@ -5,6 +5,7 @@ import io.github.giuliopft.telegramlogin.events.PlayerRegisterEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 
@@ -34,12 +35,19 @@ public class PlayerRegisterListener implements Listener {
 
         if (!isUnique && !allowMultipleAccounts && !isAllowMultipleAccountsException) {
             event.setState(PlayerRegisterEvent.State.MULTIPLE_ACCOUNTS);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    telegramLogin.getNewPlayers().remove(event.getPassword()).kickPlayer(telegramLogin.getTranslatedString("minecraft.kick-message-multiple-accounts"));
+                }
+            }.runTask(telegramLogin);
             telegramLogin.debug(event.getTelegramId() + " already has an account");
             return;
         }
 
         Player player = telegramLogin.getNewPlayers().remove(event.getPassword());
         telegramLogin.getPlayersAwaitingVerification().remove(player);
+        player.sendMessage(telegramLogin.getTranslatedString("minecraft.successful"));
         event.setPlayer(player);
         try {
             telegramLogin.getDatabase().add(player.getUniqueId(), event.getTelegramId());

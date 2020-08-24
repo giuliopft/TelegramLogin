@@ -93,7 +93,7 @@ public final class TelegramLogin extends JavaPlugin {
     }
 
     public String applyPlaceholders(String string) {
-        return string.replace("{prefix}", getLanguageConfig().getString("prefix"));
+        return string.replace("%prefix%", getLanguageConfig().getString("prefix"));
     }
 
     public String getTranslatedString(String path) {

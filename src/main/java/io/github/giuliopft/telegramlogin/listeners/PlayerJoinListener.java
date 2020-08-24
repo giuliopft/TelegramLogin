@@ -1,5 +1,6 @@
 package io.github.giuliopft.telegramlogin.listeners;
 
+import com.pengrad.telegrambot.request.DeleteMessage;
 import io.github.giuliopft.telegramlogin.TelegramLogin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,6 +10,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerJoinListener implements Listener {
     private final TelegramLogin telegramLogin;
@@ -45,7 +49,7 @@ public class PlayerJoinListener implements Listener {
             @Override
             public void run() {
                 if (telegramLogin.getPlayersAwaitingVerification().contains(event.getPlayer())) {
-                    event.getPlayer().kickPlayer(telegramLogin.getTranslatedString("minecraft.kick-message"));
+                    event.getPlayer().kickPlayer(telegramLogin.getTranslatedString("minecraft.kick-message-too-much-time"));
                 }
             }
         }.runTaskLater(telegramLogin, telegramLogin.getConfig().getInt("login.idle-time") * 20);
@@ -67,7 +71,12 @@ public class PlayerJoinListener implements Listener {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            //TODO Send message through the bot (async)
+            int message = telegramLogin.getBot().login(id, event.getPlayer());
+            ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+            int finalId = id;
+            ses.schedule(() -> telegramLogin.getBot().execute(new DeleteMessage(finalId, message)),
+                    telegramLogin.getConfig().getInt("login.idle-time"), TimeUnit.SECONDS);
+            event.getPlayer().sendMessage(telegramLogin.getTranslatedString("minecraft.login"));
         }
     }
 }
