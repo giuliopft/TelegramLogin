@@ -14,11 +14,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public final class TelegramLogin extends JavaPlugin {
@@ -34,17 +38,22 @@ public final class TelegramLogin extends JavaPlugin {
     @Getter
     private File languageFile;
     @Getter
-    private final Set<Player> playersAwaitingVerification = new HashSet<>();
+    private final Set<Player> playersAwaitingVerification = ConcurrentHashMap.newKeySet();
     @Getter
-    private final Map<Integer, Player> newPlayers = new HashMap<>();
+    private final Map<Integer, Player> newPlayers = new ConcurrentHashMap<>();
 
     @Override
     public void onEnable() {
-        try {
-            database.initialize();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    database.initialize();
+                } catch (SQLException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskAsynchronously(this);
 
         saveDefaultConfig();
         getConfig().options().copyDefaults(true);

@@ -24,25 +24,26 @@ public class LoginConfirmationListener implements Listener {
         try {
             ResultSet accounts = telegramLogin.getDatabase().get(event.getTelegramId());
             while (accounts.next()) {
-                Player player = Bukkit.getPlayer(UUID.fromString(accounts.getString("uuid")));
-                telegramLogin.debug("Checking player " + player.getName());
-                if (!telegramLogin.getPlayersAwaitingVerification().contains(player)) {
-                    telegramLogin.debug("Player " + player.getName() + " is not awaiting verification");
-                    continue;
-                }
-                if (event.isConfirmed()) {
-                    telegramLogin.debug("Player " + player.getName() + " accepted");
-                    telegramLogin.getPlayersAwaitingVerification().remove(player);
-                    player.sendMessage(telegramLogin.getTranslatedString("minecraft.successful"));
-                } else {
-                    telegramLogin.debug("Player " + player.getName() + " kicked");
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
+                UUID uuid = UUID.fromString(accounts.getString("uuid"));
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Player player = Bukkit.getPlayer(uuid);
+                        telegramLogin.debug("Checking player " + player.getName());
+                        if (!telegramLogin.getPlayersAwaitingVerification().contains(player)) {
+                            telegramLogin.debug("Player " + player.getName() + " is not awaiting verification");
+                            return;
+                        }
+                        if (event.isConfirmed()) {
+                            telegramLogin.debug("Player " + player.getName() + " accepted");
+                            telegramLogin.getPlayersAwaitingVerification().remove(player);
+                            player.sendMessage(telegramLogin.getTranslatedString("minecraft.successful"));
+                        } else {
+                            telegramLogin.debug("Player " + player.getName() + " kicked");
                             player.kickPlayer(telegramLogin.getTranslatedString("minecraft.kick-message-it-is-not-you"));
                         }
-                    }.runTask(telegramLogin);
-                }
+                    }
+                }.runTask(telegramLogin);
             }
         } catch (SQLException e) {
             e.printStackTrace();
