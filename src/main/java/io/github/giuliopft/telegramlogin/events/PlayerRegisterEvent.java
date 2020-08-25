@@ -16,14 +16,14 @@ public class PlayerRegisterEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
     @Getter
     @Setter
-    private State state;
+    private volatile State state;
     @Getter
     private final int password;
     @Getter
     private final int telegramId;
     @Getter
     @Setter
-    private Player player;
+    private volatile Player player;
 
     public PlayerRegisterEvent(int password, int telegramId) {
         super(true);

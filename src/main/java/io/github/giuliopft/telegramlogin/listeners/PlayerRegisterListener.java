@@ -33,27 +33,27 @@ public class PlayerRegisterListener implements Listener {
         boolean allowMultipleAccounts = telegramLogin.getConfig().getBoolean("login.allow-multiple-accounts");
         boolean isAllowMultipleAccountsException = telegramLogin.getConfig().getIntegerList("login.allow-multiple-accounts-exceptions").contains(event.getTelegramId());
 
+        Player player = telegramLogin.getNewPlayers().remove(event.getPassword());
+        telegramLogin.getPlayersAwaitingVerification().remove(player);
+
         if (!isUnique && !allowMultipleAccounts && !isAllowMultipleAccountsException) {
             event.setState(PlayerRegisterEvent.State.MULTIPLE_ACCOUNTS);
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    telegramLogin.getNewPlayers().remove(event.getPassword()).kickPlayer(telegramLogin.getTranslatedString("minecraft.kick-message-multiple-accounts"));
+                    player.kickPlayer(telegramLogin.getTranslatedString("minecraft.kick-message-multiple-accounts"));
                 }
             }.runTask(telegramLogin);
             telegramLogin.debug(event.getTelegramId() + " already has an account");
-            return;
+        } else {
+            player.sendMessage(telegramLogin.getTranslatedString("minecraft.successful"));
+            event.setPlayer(player);
+            try {
+                telegramLogin.getDatabase().add(player.getUniqueId(), event.getTelegramId());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            event.setState(PlayerRegisterEvent.State.SUCCESSFUL);
         }
-
-        Player player = telegramLogin.getNewPlayers().remove(event.getPassword());
-        telegramLogin.getPlayersAwaitingVerification().remove(player);
-        player.sendMessage(telegramLogin.getTranslatedString("minecraft.successful"));
-        event.setPlayer(player);
-        try {
-            telegramLogin.getDatabase().add(player.getUniqueId(), event.getTelegramId());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        event.setState(PlayerRegisterEvent.State.SUCCESSFUL);
     }
 }
