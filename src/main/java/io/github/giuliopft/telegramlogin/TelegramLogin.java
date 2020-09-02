@@ -71,7 +71,7 @@ public final class TelegramLogin extends JavaPlugin {
     @Getter
     private final Map<Integer, Player> newPlayers = new ConcurrentHashMap<>();
     @Getter
-    private final short major = Short.parseShort(Bukkit.getBukkitVersion().split("\\.")[1]);
+    private final byte major = Byte.parseByte(Bukkit.getBukkitVersion().split("\\.")[1]);
 
     @Override
     public void onEnable() {
