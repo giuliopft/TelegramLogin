@@ -4,7 +4,7 @@ minecraft:
   new-user: '%prefix%Hi %player%! In order to join this server, you have to complete a verification with Telegram. Start @%bot-username% and send the following command to the bot: &3&o%command%&7.'
   login: '%prefix%Hi %player%! We''ve just sent a message to your Telegram account to make sure it''s you trying to log in.'
   successful: '%prefix%Authentication complete. You can now play on the server.'
-  you-cannot-move: '%prefix%You can''t do this before authenticating with Telegram!'
+  you-cannot-do-this: '%prefix%You can''t do this before authenticating with Telegram!'
   kick-message-too-much-time: '%prefix%\n&7You have been kicked for not having completed the verification!' #Use \n to add new lines
   kick-message-it-is-not-you: '%prefix%\n&7You don''t own this Minecraft account!' #Use \n to add new lines
   kick-message-multiple-accounts: '%prefix%\n&7You already have a Minecraft account linked to your Telegram profile!' #Use \n to add new lines

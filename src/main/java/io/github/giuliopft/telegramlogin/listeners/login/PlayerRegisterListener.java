@@ -1,4 +1,4 @@
-package io.github.giuliopft.telegramlogin.listeners;
+package io.github.giuliopft.telegramlogin.listeners.login;
 
 import io.github.giuliopft.telegramlogin.TelegramLogin;
 import io.github.giuliopft.telegramlogin.events.PlayerRegisterEvent;

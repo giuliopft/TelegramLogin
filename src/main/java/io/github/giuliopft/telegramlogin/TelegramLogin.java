@@ -1,9 +1,21 @@
 package io.github.giuliopft.telegramlogin;
 
 import io.github.giuliopft.telegramlogin.bot.Bot;
-import io.github.giuliopft.telegramlogin.listeners.PlayerJoinListener;
-import io.github.giuliopft.telegramlogin.listeners.PlayerQuitListener;
-import io.github.giuliopft.telegramlogin.listeners.PlayerRegisterListener;
+import io.github.giuliopft.telegramlogin.listeners.login.LoginConfirmationListener;
+import io.github.giuliopft.telegramlogin.listeners.login.PlayerJoinListener;
+import io.github.giuliopft.telegramlogin.listeners.login.PlayerQuitListener;
+import io.github.giuliopft.telegramlogin.listeners.login.PlayerRegisterListener;
+import io.github.giuliopft.telegramlogin.listeners.security.block.*;
+import io.github.giuliopft.telegramlogin.listeners.security.enchantment.EnchantItemListener;
+import io.github.giuliopft.telegramlogin.listeners.security.enchantment.PrepareItemEnchantListener;
+import io.github.giuliopft.telegramlogin.listeners.security.entity.EntityPickupItemListener;
+import io.github.giuliopft.telegramlogin.listeners.security.entity.EntityTameListener;
+import io.github.giuliopft.telegramlogin.listeners.security.entity.PlayerLeashEntityListener;
+import io.github.giuliopft.telegramlogin.listeners.security.entity.ProjectileLaunchListener;
+import io.github.giuliopft.telegramlogin.listeners.security.hanging.HangingBreakByEntityListener;
+import io.github.giuliopft.telegramlogin.listeners.security.hanging.HangingPlaceListener;
+import io.github.giuliopft.telegramlogin.listeners.security.inventory.InventoryInteractListener;
+import io.github.giuliopft.telegramlogin.listeners.security.player.*;
 import io.github.giuliopft.telegramlogin.sql.Database;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +53,8 @@ public final class TelegramLogin extends JavaPlugin {
     private final Set<Player> playersAwaitingVerification = ConcurrentHashMap.newKeySet();
     @Getter
     private final Map<Integer, Player> newPlayers = new ConcurrentHashMap<>();
+    @Getter
+    private final short major = Short.parseShort(Bukkit.getBukkitVersion().split("\\.")[1]);
 
     @Override
     public void onEnable() {
@@ -66,9 +80,57 @@ public final class TelegramLogin extends JavaPlugin {
         }
         languageConfig = YamlConfiguration.loadConfiguration(languageFile);
 
-        registerListeners(new PlayerJoinListener(this),
+        registerListeners(
+                //Login
+                new LoginConfirmationListener(this),
+                new PlayerJoinListener(this),
                 new PlayerQuitListener(this),
-                new PlayerRegisterListener(this));
+                new PlayerRegisterListener(this),
+                //Security - Block
+                new BlockBreakListener(this),
+                new BlockDamageListener(this),
+                new BlockPlaceListener(this),
+                new SignChangeListener(this),
+                //Security - Enchantment
+                new EnchantItemListener(this),
+                new PrepareItemEnchantListener(this),
+                //Security - Entity
+                new EntityPickupItemListener(this),
+                new EntityTameListener(this),
+                new PlayerLeashEntityListener(this),
+                new ProjectileLaunchListener(this),
+                //Security - Hanging
+                new HangingBreakByEntityListener(this),
+                new HangingPlaceListener(this),
+                //Security - Inventory
+                new InventoryInteractListener(this),
+                //Security - Player
+                new AsyncPlayerChatListener(this),
+                new PlayerBedEnterListener(this),
+                new PlayerBucketListener(this),
+                new PlayerCommandPreprocessListener(this),
+                new PlayerDropItemListener(this),
+                new PlayerEditBookListener(this),
+                new PlayerEggThrowListener(this),
+                new PlayerFishListener(this),
+                new PlayerInteractEntityListener(this),
+                new PlayerInteractListener(this),
+                new PlayerItemConsumeListener(this),
+                new PlayerMoveListener(this),
+                new PlayerShearEntityListener(this));
+
+        if (major >= 12) {
+            registerListeners(
+                    //Security - Block
+                    new BlockFertilizeListener(this));
+        }
+
+        if (major >= 9) {
+            registerListeners(
+                    //Security - Player
+                    new PlayerItemMendListener(this)
+            );
+        }
 
         if (!getConfig().getString("bot.username").isEmpty() && !getConfig().getString("bot.token").isEmpty()) {
             bot = new Bot(this, getConfig().getString("bot.token"));

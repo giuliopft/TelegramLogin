@@ -4,7 +4,7 @@ minecraft:
   new-user: '%prefix%Ciao %player%! Per entrare su questo server, è necessario che tu completi una verifica con Telegram. Avvia @%bot-username% e digita il seguente comando sul bot: &3&o%command%&7.'
   login: '%prefix%Ciao %player%! Ti è appena stato mandato un messaggio su Telegram per verificare che sia veramente tu.'
   successful: '%prefix%Autenticazione completata. Puoi ora giocare liberamente sul server.'
-  you-cannot-move: '%prefix%Non puoi fare questo prima di autenticarti con Telegram!'
+  you-cannot-do-this: '%prefix%Non puoi fare questo prima di esserti autenticato con Telegram!'
   kick-message-too-much-time: '%prefix%\n&7Sei stato espulso per non aver completato la verifica!' #Usa \n per aggiungere altre righe
   kick-message-it-is-not-you: '%prefix%\n&7Non sei il proprietario di questo account!' #Usa \n per aggiungere altre righe
   kick-message-multiple-accounts: '%prefix%\n&7Hai già un account Minecraft collegato al tuo profilo Telegram!' #Usa \n per aggiungere altre righe

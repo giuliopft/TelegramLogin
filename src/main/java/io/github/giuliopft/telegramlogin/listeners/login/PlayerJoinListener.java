@@ -1,4 +1,4 @@
-package io.github.giuliopft.telegramlogin.listeners;
+package io.github.giuliopft.telegramlogin.listeners.login;
 
 import com.pengrad.telegrambot.request.DeleteMessage;
 import io.github.giuliopft.telegramlogin.TelegramLogin;
