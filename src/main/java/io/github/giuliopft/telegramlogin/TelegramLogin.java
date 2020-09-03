@@ -21,7 +21,8 @@ import io.github.giuliopft.telegramlogin.listeners.security.hanging.HangingPlace
 import io.github.giuliopft.telegramlogin.listeners.security.inventory.InventoryInteractListener;
 import io.github.giuliopft.telegramlogin.listeners.security.player.AsyncPlayerChatListener;
 import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerBedEnterListener;
-import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerBucketListener;
+import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerBucketEmptyListener;
+import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerBucketFillListener;
 import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerCommandPreprocessListener;
 import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerDropItemListener;
 import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerEditBookListener;
@@ -124,7 +125,8 @@ public final class TelegramLogin extends JavaPlugin {
                 //Security - Player
                 new AsyncPlayerChatListener(this),
                 new PlayerBedEnterListener(this),
-                new PlayerBucketListener(this),
+                new PlayerBucketEmptyListener(this),
+                new PlayerBucketFillListener(this),
                 new PlayerCommandPreprocessListener(this),
                 new PlayerDropItemListener(this),
                 new PlayerEditBookListener(this),

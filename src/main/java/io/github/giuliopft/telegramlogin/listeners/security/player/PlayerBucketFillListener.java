@@ -4,17 +4,17 @@ import io.github.giuliopft.telegramlogin.TelegramLogin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerBucketEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 
-public class PlayerBucketListener implements Listener {
+public class PlayerBucketFillListener implements Listener {
     private final TelegramLogin telegramLogin;
 
-    public PlayerBucketListener(TelegramLogin telegramLogin) {
+    public PlayerBucketFillListener(TelegramLogin telegramLogin) {
         this.telegramLogin = telegramLogin;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerBucket(PlayerBucketEvent event) {
+    public void onPlayerBucket(PlayerBucketFillEvent event) {
         if (telegramLogin.getPlayersAwaitingVerification().contains(event.getPlayer())) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(telegramLogin.getTranslatedString("minecraft.you-cannot-do-this"));
