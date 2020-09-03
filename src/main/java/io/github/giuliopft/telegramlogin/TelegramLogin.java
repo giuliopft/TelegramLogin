@@ -35,8 +35,6 @@ import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerItemMen
 import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerMoveListener;
 import io.github.giuliopft.telegramlogin.listeners.security.player.PlayerShearEntityListener;
 import io.github.giuliopft.telegramlogin.sql.Database;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -56,22 +54,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public final class TelegramLogin extends JavaPlugin {
-    @Getter
     private Bot bot;
-    @Getter
     private final Database database = new Database(this);
-    @Getter
-    @Setter
     private boolean debug;
-    @Getter
     private FileConfiguration languageConfig;
-    @Getter
     private File languageFile;
-    @Getter
     private final Set<Player> playersAwaitingVerification = ConcurrentHashMap.newKeySet();
-    @Getter
     private final Map<Integer, Player> newPlayers = new ConcurrentHashMap<>();
-    @Getter
     private final byte major = Byte.parseByte(Bukkit.getBukkitVersion().split("\\.")[1]);
 
     @Override
@@ -160,6 +149,7 @@ public final class TelegramLogin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        bot.removeGetUpdatesListener();
     }
 
     public void registerListeners(Listener... listeners) {
@@ -171,8 +161,12 @@ public final class TelegramLogin extends JavaPlugin {
 
     private void createLanguageFiles(String... languages) {
         for (String language : languages) {
-            saveResource("languages" + File.separator + language + ".yml", false);
-            debug(language + ".yml created");
+            if (!new File(getDataFolder(), "languages" + File.separator + language + ".yml").exists()) {
+                saveResource("languages" + File.separator + language + ".yml", false);
+                debug(language + ".yml created");
+            } else {
+                debug(language + ".yml already exists");
+            }
         }
     }
 
@@ -192,5 +186,45 @@ public final class TelegramLogin extends JavaPlugin {
 
     public List<String> getTranslatedStringList(String path) {
         return getLanguageConfig().getStringList(path).stream().map(s -> ChatColor.translateAlternateColorCodes('&', applyPlaceholders(s))).collect(Collectors.toList());
+    }
+
+    public Bot getBot() {
+        return this.bot;
+    }
+
+    public Database getDatabase() {
+        return this.database;
+    }
+
+    public boolean getDebug() {
+        //Probably useless
+        return this.debug;
+    }
+
+    public FileConfiguration getLanguageConfig() {
+        return this.languageConfig;
+    }
+
+    public File getLanguageFile() {
+        //Probably useless
+        return this.languageFile;
+    }
+
+    public Set<Player> getPlayersAwaitingVerification() {
+        return this.playersAwaitingVerification;
+    }
+
+    public Map<Integer, Player> getNewPlayers() {
+        return this.newPlayers;
+    }
+
+    public byte getMajor() {
+        //Probably useless
+        return this.major;
+    }
+
+    public void setDebug(boolean debug) {
+        //Will be used with /telegramlogin reload
+        this.debug = debug;
     }
 }

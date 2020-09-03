@@ -51,6 +51,9 @@ public class Bot extends TelegramBot {
             case "/r":
                 onR(message.chat().id(), message.text());
                 break;
+            default:
+                error(message.chat().id());
+                break;
         }
     }
 
@@ -111,7 +114,8 @@ public class Bot extends TelegramBot {
                 .parseMode(ParseMode.HTML)
                 .disableWebPagePreview(true)
                 .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton[]{
-                        new InlineKeyboardButton(telegramLogin.getTranslatedString("telegram.login.buttons.yes")).callbackData("yes"),
-                        new InlineKeyboardButton(telegramLogin.getTranslatedString("telegram.login.buttons.no")).callbackData("no")}))).message().messageId();
+                        new InlineKeyboardButton(telegramLogin.getTranslatedString("telegram.login.button-yes")).callbackData("yes"),
+                        new InlineKeyboardButton(telegramLogin.getTranslatedString("telegram.login.button-no")).callbackData("no")})))
+                .message().messageId();
     }
 }

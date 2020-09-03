@@ -1,4 +1,4 @@
-prefix: '&3[TelegramLogin]'
+prefix: '&3[TelegramLogin]&7 '
 
 minecraft:
   new-user: '%prefix%Hi %player%! In order to join this server, you have to complete a verification with Telegram. Start @%bot-username% and send the following command to the bot: &3&o%command%&7.'
@@ -17,7 +17,6 @@ telegram: #You may use HTML tags and \n in each of the following messages
   multiple-accounts: 'You have too many Minecraft accounts linked to this Telegram profile!'
   login:
     message: 'Hi! Someone is trying to join the server with your account %player%. Is this you?'
-    buttons:
-      yes: '👍 Yes, it is me'
-      no: '👎 No, it is not me'
+    button-yes: '👍 Yes, it is me'
+    button-no: '👎 No, it is not me'
   error: 'Invalid command, please retry.'

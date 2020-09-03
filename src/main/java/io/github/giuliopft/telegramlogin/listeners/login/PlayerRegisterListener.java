@@ -26,7 +26,7 @@ public class PlayerRegisterListener implements Listener {
 
         boolean isUnique = true;
         try {
-            isUnique = telegramLogin.getDatabase().get(event.getTelegramId()).next();
+            isUnique = telegramLogin.getDatabase().get(event.getTelegramId()).isEmpty();
         } catch (SQLException e) {
             e.printStackTrace();
         }

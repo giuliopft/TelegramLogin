@@ -1,7 +1,5 @@
 package io.github.giuliopft.telegramlogin.events;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -14,15 +12,9 @@ public class PlayerRegisterEvent extends Event {
     }
 
     private static final HandlerList HANDLERS = new HandlerList();
-    @Getter
-    @Setter
     private volatile State state;
-    @Getter
     private final int password;
-    @Getter
     private final int telegramId;
-    @Getter
-    @Setter
     private volatile Player player;
 
     public PlayerRegisterEvent(int password, int telegramId) {
@@ -39,5 +31,29 @@ public class PlayerRegisterEvent extends Event {
     @SuppressWarnings("unused")
     public static HandlerList getHandlerList() {
         return HANDLERS;
+    }
+
+    public State getState() {
+        return this.state;
+    }
+
+    public int getPassword() {
+        return this.password;
+    }
+
+    public int getTelegramId() {
+        return this.telegramId;
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

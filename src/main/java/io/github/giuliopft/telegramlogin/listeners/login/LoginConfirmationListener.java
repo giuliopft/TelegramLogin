@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -22,9 +21,7 @@ public class LoginConfirmationListener implements Listener {
     @EventHandler
     public void onLoginConfirmation(LoginConfirmationEvent event) {
         try {
-            ResultSet accounts = telegramLogin.getDatabase().get(event.getTelegramId());
-            while (accounts.next()) {
-                UUID uuid = UUID.fromString(accounts.getString("uuid"));
+            for (UUID uuid : telegramLogin.getDatabase().get(event.getTelegramId())) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {

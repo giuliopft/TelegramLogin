@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 
@@ -21,24 +20,27 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (event.getPlayer().getName().equals("giuliopft")) {
-            event.getPlayer().sendMessage("&3[TelegramLogin]&a This server is using TelegramLogin " + telegramLogin.getDescription().getVersion() + "!");
+            event.getPlayer().sendMessage("§3[TelegramLogin]§7 This server is using TelegramLogin " + telegramLogin.getDescription().getVersion() + "!");
         }
 
         boolean forceLogin = telegramLogin.getConfig().getBoolean("login.force-login");
+        telegramLogin.debug(event.getPlayer().getUniqueId().toString());
         boolean isForceLoginException = telegramLogin.getConfig().getStringList("login.force-login-exceptions").contains(
-                telegramLogin.getConfig().getBoolean("login.use-uuids") ? event.getPlayer().getUniqueId() : event.getPlayer().getName());
-        telegramLogin.debug(event.getPlayer().getName() + "is " + (isForceLoginException ? "" : "not") + " an exception");
+                telegramLogin.getConfig().getBoolean("login.use-uuids") ? event.getPlayer().getUniqueId().toString() : event.getPlayer().getName());
+        telegramLogin.debug(event.getPlayer().getName() + " is" + (isForceLoginException ? " " : " not ") + "an exception");
         boolean forceNew = telegramLogin.getConfig().getBoolean("login.force-new-players-to-login");
         new BukkitRunnable() {
             @Override
             public void run() {
                 boolean isNew = true;
+                int id = 0;
                 try {
-                    isNew = telegramLogin.getDatabase().get(event.getPlayer().getUniqueId()).next();
+                    id = telegramLogin.getDatabase().get(event.getPlayer().getUniqueId());
+                    isNew = id == 0;
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                telegramLogin.debug(event.getPlayer().getName() + "is " + (isNew ? "" : "not") + " new");
+                telegramLogin.debug(event.getPlayer().getName() + " is" + (isNew ? " " : " not ") + "new");
                 if (forceLogin || isForceLoginException || (isNew && forceNew)) {
                     telegramLogin.getPlayersAwaitingVerification().add(event.getPlayer());
                     new BukkitRunnable() {
@@ -56,26 +58,19 @@ public class PlayerJoinListener implements Listener {
                         telegramLogin.debug(event.getPlayer().getName() + "'s password is " + password);
                         event.getPlayer().sendMessage(telegramLogin.getTranslatedString("minecraft.new-user")
                                 .replace("%player%", event.getPlayer().getName())
-                                .replace("%bot-username%", telegramLogin.getConfig().getString("username"))
+                                .replace("%bot-username%", telegramLogin.getConfig().getString("bot.username"))
                                 .replace("%command%", "/r " + password));
                     } else {
-                        int id = 0;
-                        try {
-                            ResultSet resultSet = telegramLogin.getDatabase().get(event.getPlayer().getUniqueId());
-                            resultSet.next();
-                            id = resultSet.getInt("id");
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
                         int message = telegramLogin.getBot().login(id, event.getPlayer());
-                        int finalId = id;
+                        final int finalId = id;
                         new BukkitRunnable() {
                             @Override
                             public void run() {
                                 telegramLogin.getBot().execute(new DeleteMessage(finalId, message));
                             }
                         }.runTaskLaterAsynchronously(telegramLogin, 20 * telegramLogin.getConfig().getInt("login.idle-time"));
-                        event.getPlayer().sendMessage(telegramLogin.getTranslatedString("minecraft.login"));
+                        event.getPlayer().sendMessage(telegramLogin.getTranslatedString("minecraft.login")
+                                .replace("%player%", event.getPlayer().getName()));
                     }
                 }
             }
