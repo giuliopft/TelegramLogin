@@ -82,11 +82,11 @@ public final class TelegramLogin extends JavaPlugin {
      */
     private File languageFile;
     /**
-     * Players who haven't authenticated yet.
+     * Players who haven't authenticated yet. Thread-safe.
      */
     private final Set<Player> playersAwaitingVerification = ConcurrentHashMap.newKeySet();
     /**
-     * New players' passwords.
+     * New players' passwords. Thread-safe.
      */
     private final Map<Integer, Player> newPlayers = new ConcurrentHashMap<>();
     /**
@@ -309,7 +309,7 @@ public final class TelegramLogin extends JavaPlugin {
     }
 
     /**
-     * Gets a {@link Set} containing all players who haven't completed the verification yet.
+     * Gets a thread-safe {@link Set} containing all players who haven't completed the verification yet.
      *
      * @return {@link #playersAwaitingVerification}
      */
@@ -318,7 +318,7 @@ public final class TelegramLogin extends JavaPlugin {
     }
 
     /**
-     * Gets a {@link Map} containing new players' passwords as keys and new players as values.
+     * Gets a thread-safe {@link Map} containing new players' passwords as keys and new players as values.
      *
      * @return {@link #newPlayers}
      */
