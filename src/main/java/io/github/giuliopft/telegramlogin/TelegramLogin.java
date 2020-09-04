@@ -53,16 +53,50 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * TelegramLogin is a plugin for Bukkit which forces players to authenticate
+ * with Telegram before being able to play on a Minecraft server.
+ *
+ * @author giuliopft
+ * @version 1.0
+ */
 public final class TelegramLogin extends JavaPlugin {
+    /**
+     * The Telegram bot which users should interact with.
+     */
     private Bot bot;
+    /**
+     * The SQLite database where players and Telegram IDs are stored.
+     */
     private final Database database = new Database(this);
+    /**
+     * Toggles debug statements.
+     */
     private boolean debug;
+    /**
+     * The .yml locale, already parsed.
+     */
     private FileConfiguration languageConfig;
+    /**
+     * The .yml locale, not parsed yet.
+     */
     private File languageFile;
+    /**
+     * Players who haven't authenticated yet.
+     */
     private final Set<Player> playersAwaitingVerification = ConcurrentHashMap.newKeySet();
+    /**
+     * New players' passwords.
+     */
     private final Map<Integer, Player> newPlayers = new ConcurrentHashMap<>();
+    /**
+     * Major Bukkit release, for example 12 for Minecraft 1.12.2.
+     */
     private final byte major = Byte.parseByte(Bukkit.getBukkitVersion().split("\\.")[1]);
 
+    /**
+     * You should NEVER call this method.
+     */
     @Override
     public void onEnable() {
         new BukkitRunnable() {
@@ -147,11 +181,19 @@ public final class TelegramLogin extends JavaPlugin {
         debug("onEnable() completed");
     }
 
+    /**
+     * You should NEVER call this method.
+     */
     @Override
     public void onDisable() {
         bot.removeGetUpdatesListener();
     }
 
+    /**
+     * Shortcut for registering a {@link Listener} or more.
+     *
+     * @param listeners The listener(s) to register.
+     */
     public void registerListeners(Listener... listeners) {
         for (Listener listener : listeners) {
             getServer().getPluginManager().registerEvents(listener, this);
@@ -159,6 +201,11 @@ public final class TelegramLogin extends JavaPlugin {
         }
     }
 
+    /**
+     * Shortcut for saving default locales, as instances of {@link FileConfiguration}.
+     *
+     * @param languages The locale(s) to save.
+     */
     private void createLanguageFiles(String... languages) {
         for (String language : languages) {
             if (!new File(getDataFolder(), "languages" + File.separator + language + ".yml").exists()) {
@@ -170,59 +217,130 @@ public final class TelegramLogin extends JavaPlugin {
         }
     }
 
+    /**
+     * Sends debug messages to the server console if {@link #debug} is set to true.
+     *
+     * @param message The debug message to send.
+     */
     public void debug(String message) {
         if (debug) {
             Bukkit.getConsoleSender().sendMessage("§3[TelegramLogin] §4[Debug]§7 " + message);
         }
     }
 
-    public String applyPlaceholders(String string) {
-        return string.replace("%prefix%", getLanguageConfig().getString("prefix"));
+    /**
+     * Replaces default placeholders, such as %prefix%, to the provided string.
+     *
+     * @param string The string where to replace placeholders.
+     * @return The string with the placeholders replaced.
+     */
+    public String replacePlaceholders(String string) {
+        return string.replace("%prefix%", languageConfig.getString("prefix"));
     }
 
+    /**
+     * Gets a formatted string from the chosen locale.
+     *
+     * @param path The path in the chosen locale from where to get the string.
+     * @return The formatted string.
+     * @see #getTranslatedStringList(String)
+     */
     public String getTranslatedString(String path) {
-        return ChatColor.translateAlternateColorCodes('&', applyPlaceholders(getLanguageConfig().getString(path)));
+        return ChatColor.translateAlternateColorCodes('&', replacePlaceholders(languageConfig.getString(path)));
     }
 
+    /**
+     * Gets a formatted {@link List}<{@link String}> from the chosen locale.
+     *
+     * @param path The path in the chosen locale from where to get the {@link List}<{@link String}>
+     * @return The formatted {@link List}<{@link String}>
+     * @see #getTranslatedString(String)
+     */
     public List<String> getTranslatedStringList(String path) {
-        return getLanguageConfig().getStringList(path).stream().map(s -> ChatColor.translateAlternateColorCodes('&', applyPlaceholders(s))).collect(Collectors.toList());
+        return languageConfig.getStringList(path).stream().map(s -> ChatColor.translateAlternateColorCodes('&', replacePlaceholders(s))).collect(Collectors.toList());
     }
 
+    /**
+     * Gets the Telegram bot instance, which sends and receives authentication messages.
+     *
+     * @return {@link #bot}
+     */
     public Bot getBot() {
         return this.bot;
     }
 
+    /**
+     * Gets the SQLite database where users' UUIDs and Telegram IDs are stored.
+     *
+     * @return {@link #database}
+     */
     public Database getDatabase() {
         return this.database;
     }
 
+    /**
+     * Gets if TelegramLogin should send debugging messages to the server console.
+     *
+     * @return {@link #debug}
+     */
     public boolean getDebug() {
         //Probably useless
         return this.debug;
     }
 
+    /**
+     * Gets the chosen locale, parsed.
+     *
+     * @return {@link #languageConfig}
+     */
     public FileConfiguration getLanguageConfig() {
+        //Probably useless
         return this.languageConfig;
     }
 
+    /**
+     * Gets the chosen locale, still not parsed.
+     *
+     * @return {@link #languageFile}
+     */
     public File getLanguageFile() {
         //Probably useless
         return this.languageFile;
     }
 
+    /**
+     * Gets a {@link Set} containing all players who haven't completed the verification yet.
+     *
+     * @return {@link #playersAwaitingVerification}
+     */
     public Set<Player> getPlayersAwaitingVerification() {
         return this.playersAwaitingVerification;
     }
 
+    /**
+     * Gets a {@link Map} containing new players' passwords as keys and new players as values.
+     *
+     * @return {@link #newPlayers}
+     */
     public Map<Integer, Player> getNewPlayers() {
         return this.newPlayers;
     }
 
+    /**
+     * Gets the major Bukkit release, for example 12 for Minecraft 1.12.2.
+     *
+     * @return {@link #major}
+     */
     public byte getMajor() {
         //Probably useless
         return this.major;
     }
 
+    /**
+     * Sets if TelegramLogin should send debugging messages to the server console.
+     *
+     * @param debug <code>true</code> if such messages should be sent, <code>false</code> otherwise
+     */
     public void setDebug(boolean debug) {
         //Will be used with /telegramlogin reload
         this.debug = debug;
