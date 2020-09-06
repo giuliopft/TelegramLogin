@@ -28,5 +28,13 @@ login:
     - 379379251
   idle-time: 180 #How many seconds should the plugin wait before kicking players who have not completed the verification?
 
+database:
+  mysql: false #If you don't know what this is, leave this to false. If you want to use MySQL instead of SQLite (this is
+  #suggested if you have more than one lobby server), set this to true.
+  address: 'localhost' #Ignored if mysql is set to false. Your MySQL server's IP address.
+  port: 3306 #Your MySQL server's port.
+  user: 'root' #The user which TelegramLogin should access your MySQL server with.
+  password: 'password' #That user's password.
+
 debug: true #Normally, this should be set to false. If you're experiencing unexpected behaviour, set this to true and send your
 #log to the developer through GitHub issues (https://github.com/giuliopft/TelegramLogin) or Telegram (https://t.me/giuliopft).
