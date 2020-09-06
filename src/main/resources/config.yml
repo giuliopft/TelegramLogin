@@ -25,11 +25,11 @@ login:
     #use @CreationDateBot. For example, if you want to know my ID, given that my Telegram username
     #is @giuliopft, just send @giuliopft to this bot and it'll tell you that my ID is 173038429.
     - 173038429
-    - 379379251
+    - 1394957309
   idle-time: 180 #How many seconds should the plugin wait before kicking players who have not completed the verification?
 
 database:
-  mysql: false #If you don't know what this is, leave this to false. If you want to use MySQL instead of SQLite (this is
+  mysql: false #If you don't know what this is, leave it to false. If you want to use MySQL instead of SQLite (this is
   #suggested if you have more than one lobby server), set this to true.
   address: 'localhost' #Ignored if mysql is set to false. Your MySQL server's IP address.
   port: 3306 #Your MySQL server's port.

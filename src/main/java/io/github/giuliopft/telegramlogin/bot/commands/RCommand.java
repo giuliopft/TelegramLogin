@@ -19,11 +19,6 @@ public class RCommand extends BotCommand {
 
         PlayerRegisterEvent event = new PlayerRegisterEvent(new Integer(arguments[0]), chatId);
         Bukkit.getPluginManager().callEvent(event);
-
-        if (event.getState() == PlayerRegisterEvent.State.WRONG_PASSWORD) {
-            return telegramLogin.getBot().error(chatId);
-        }
-
         switch (event.getState()) {
             case SUCCESSFUL:
                 return new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.successful-registration")
@@ -31,7 +26,10 @@ public class RCommand extends BotCommand {
             case MULTIPLE_ACCOUNTS:
                 return new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.multiple-accounts"))
                         .parseMode(ParseMode.HTML).disableWebPagePreview(true);
+            case WRONG_PASSWORD:
+                return telegramLogin.getBot().error(chatId);
+            default:
+                return null;
         }
-        return null;
     }
 }
