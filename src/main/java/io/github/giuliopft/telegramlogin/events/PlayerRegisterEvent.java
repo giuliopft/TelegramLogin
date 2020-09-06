@@ -14,10 +14,10 @@ public class PlayerRegisterEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
     private volatile State state;
     private final int password;
-    private final int telegramId;
+    private final long telegramId;
     private volatile Player player;
 
-    public PlayerRegisterEvent(int password, int telegramId) {
+    public PlayerRegisterEvent(int password, long telegramId) {
         super(true);
         this.password = password;
         this.telegramId = telegramId;
@@ -41,7 +41,7 @@ public class PlayerRegisterEvent extends Event {
         return this.password;
     }
 
-    public int getTelegramId() {
+    public long getTelegramId() {
         return this.telegramId;
     }
 

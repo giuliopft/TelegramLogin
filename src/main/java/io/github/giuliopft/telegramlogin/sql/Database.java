@@ -41,7 +41,7 @@ public final class Database {
         }
     }
 
-    public Set<UUID> get(int id) throws SQLException {
+    public Set<UUID> get(long id) throws SQLException {
         try (Connection connection = DriverManager.getConnection(path)) {
             String query = "SELECT * FROM Players WHERE id = " + id + ";";
             telegramLogin.debug("The following query is being executed: " + query);
@@ -54,7 +54,7 @@ public final class Database {
         }
     }
 
-    public void add(UUID uuid, int id) throws SQLException {
+    public void add(UUID uuid, long id) throws SQLException {
         try (Connection connection = DriverManager.getConnection(path)) {
             String update = "INSERT INTO Players VALUES (\"" + uuid.toString() + "\", " + id + ");";
             telegramLogin.debug("The following update is being executed: " + update);

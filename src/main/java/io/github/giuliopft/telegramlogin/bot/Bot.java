@@ -14,17 +14,20 @@ import com.pengrad.telegrambot.request.EditMessageReplyMarkup;
 import com.pengrad.telegrambot.request.EditMessageText;
 import com.pengrad.telegrambot.request.SendMessage;
 import io.github.giuliopft.telegramlogin.TelegramLogin;
+import io.github.giuliopft.telegramlogin.bot.commands.BotCommand;
+import io.github.giuliopft.telegramlogin.bot.commands.BotCommandFactory;
 import io.github.giuliopft.telegramlogin.events.LoginConfirmationEvent;
-import io.github.giuliopft.telegramlogin.events.PlayerRegisterEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Bot extends TelegramBot {
     private final TelegramLogin telegramLogin;
+    private final BotCommandFactory botCommandFactory;
 
     public Bot(TelegramLogin telegramLogin, String token) {
         super(token);
         this.telegramLogin = telegramLogin;
+        botCommandFactory = new BotCommandFactory(telegramLogin);
         setUpdatesListener(updates -> {
             for (Update update : updates) {
                 if (update.message() != null) {
@@ -42,19 +45,18 @@ public class Bot extends TelegramBot {
 
     private void onMessage(Message message) {
         telegramLogin.debug(message.from().id() + " has just sent this message to the bot: " + message.text());
-        switch (message.text().toLowerCase().split(" ")[0]) {
-            case ".start":
-            case "/start":
-                onStart(message.chat().id());
-                break;
-            case ".r":
-            case "/r":
-                onR(message.chat().id(), message.text());
-                break;
-            default:
-                error(message.chat().id());
-                break;
+        SendMessage answer;
+        if (message.text() == null) {
+            answer = error(message.chat().id());
+        } else {
+            BotCommand command = botCommandFactory.getCommand(message.chat().id(), message.text().split(" "));
+            if (command == null) {
+                answer = error(message.chat().id());
+            } else {
+                answer = command.run();
+            }
         }
+        execute(answer);
     }
 
     private void onCallbackQuery(CallbackQuery callbackQuery) {
@@ -72,41 +74,10 @@ public class Bot extends TelegramBot {
         execute(new AnswerCallbackQuery(callbackQuery.id()));
     }
 
-    private void onStart(long chatId) {
-        execute(new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.start"))
+    public SendMessage error(long chatId) {
+        return new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.error"))
                 .parseMode(ParseMode.HTML)
-                .disableWebPagePreview(true));
-    }
-
-    private void onR(long chatId, String text) {
-        if (text.split(" ")[1].matches("\\d+")) {
-            PlayerRegisterEvent event = new PlayerRegisterEvent(new Integer(text.split(" ")[1]), (int) chatId);
-            Bukkit.getPluginManager().callEvent(event);
-            if (event.getState() == PlayerRegisterEvent.State.WRONG_PASSWORD) {
-                error(chatId);
-            } else {
-                SendMessage sendMessage = null;
-                switch (event.getState()) {
-                    case SUCCESSFUL:
-                        sendMessage = new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.successful-registration")
-                                .replace("%player%", event.getPlayer().getName())).parseMode(ParseMode.HTML).disableWebPagePreview(true);
-                        break;
-                    case MULTIPLE_ACCOUNTS:
-                        sendMessage = new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.multiple-accounts"))
-                                .parseMode(ParseMode.HTML).disableWebPagePreview(true);
-                        break;
-                }
-                execute(sendMessage);
-            }
-        } else {
-            error(chatId);
-        }
-    }
-
-    private void error(long chatId) {
-        execute(new SendMessage(chatId, telegramLogin.getTranslatedString("telegram.error"))
-                .parseMode(ParseMode.HTML)
-                .disableWebPagePreview(true));
+                .disableWebPagePreview(true);
     }
 
     public int login(long chatId, Player player) {
