@@ -19,7 +19,7 @@ public class LoginConfirmationEvent extends Event {
         return HANDLERS;
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "RedundantSuppression"})
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
