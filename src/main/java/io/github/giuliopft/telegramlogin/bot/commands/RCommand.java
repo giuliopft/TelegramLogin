@@ -17,7 +17,7 @@ public class RCommand extends BotCommand {
             return telegramLogin.getBot().error(chatId);
         }
 
-        PlayerRegisterEvent event = new PlayerRegisterEvent(new Integer(arguments[0]), chatId);
+        PlayerRegisterEvent event = new PlayerRegisterEvent(Integer.parseInt(arguments[0]), chatId);
         Bukkit.getPluginManager().callEvent(event);
         switch (event.getState()) {
             case SUCCESSFUL:
