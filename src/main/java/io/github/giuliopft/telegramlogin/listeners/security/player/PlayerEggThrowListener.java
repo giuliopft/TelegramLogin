@@ -13,7 +13,7 @@ public class PlayerEggThrowListener implements Listener {
         this.telegramLogin = telegramLogin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerEggThrow(PlayerEggThrowEvent event) {
         if (telegramLogin.getPlayersAwaitingVerification().contains(event.getPlayer())) {
             event.setHatching(false);

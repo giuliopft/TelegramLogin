@@ -13,7 +13,7 @@ public class PlayerCommandPreprocessListener implements Listener {
         this.telegramLogin = telegramLogin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         if (telegramLogin.getPlayersAwaitingVerification().contains(event.getPlayer())) {
             event.setCancelled(true);

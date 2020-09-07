@@ -13,7 +13,7 @@ public class PlayerBucketFillListener implements Listener {
         this.telegramLogin = telegramLogin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerBucket(PlayerBucketFillEvent event) {
         if (telegramLogin.getPlayersAwaitingVerification().contains(event.getPlayer())) {
             event.setCancelled(true);

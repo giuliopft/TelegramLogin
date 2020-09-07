@@ -3,6 +3,7 @@ package io.github.giuliopft.telegramlogin.listeners.login;
 import com.pengrad.telegrambot.request.DeleteMessage;
 import io.github.giuliopft.telegramlogin.TelegramLogin;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -17,7 +18,7 @@ public class PlayerJoinListener implements Listener {
         this.telegramLogin = telegramLogin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (event.getPlayer().getName().equals("giuliopft")) {
             event.getPlayer().sendMessage("§3[TelegramLogin]§7 This server is using TelegramLogin " + telegramLogin.getDescription().getVersion() + "!");

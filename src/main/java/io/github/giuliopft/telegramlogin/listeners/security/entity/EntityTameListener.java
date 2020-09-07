@@ -14,7 +14,7 @@ public class EntityTameListener implements Listener {
         this.telegramLogin = telegramLogin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityTame(EntityTameEvent event) {
         if (event.getOwner() instanceof Player) {
             Player player = (Player) event.getOwner();

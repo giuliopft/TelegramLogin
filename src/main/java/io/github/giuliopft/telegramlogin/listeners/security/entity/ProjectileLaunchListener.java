@@ -14,7 +14,7 @@ public class ProjectileLaunchListener implements Listener {
         this.telegramLogin = telegramLogin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();

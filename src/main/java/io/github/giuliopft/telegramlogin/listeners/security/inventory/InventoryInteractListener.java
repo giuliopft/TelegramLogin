@@ -14,7 +14,7 @@ public class InventoryInteractListener implements Listener {
         this.telegramLogin = telegramLogin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryInteract(InventoryInteractEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (telegramLogin.getPlayersAwaitingVerification().contains(player)) {

@@ -14,7 +14,7 @@ public class HangingBreakByEntityListener implements Listener {
         this.telegramLogin = telegramLogin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
         if (event.getRemover() instanceof Player) {
             Player player = (Player) event.getRemover();
