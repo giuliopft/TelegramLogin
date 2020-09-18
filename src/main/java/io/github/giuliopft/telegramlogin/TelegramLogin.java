@@ -56,6 +56,7 @@ import java.util.stream.Collectors;
 /**
  * TelegramLogin is a plugin for Bukkit which forces players to authenticate
  * with Telegram before being able to play on a Minecraft server.
+ * This is the main class of the plugin.
  *
  * @author giuliopft
  * @version 1.0
