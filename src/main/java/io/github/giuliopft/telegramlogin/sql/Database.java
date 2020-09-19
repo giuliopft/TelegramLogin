@@ -41,7 +41,7 @@ public final class Database {
      * Creates a database instance, fetching {@link #path}, {@link #mysql}, {@link #user} and {@link #password} from <code>config.yml</code>.
      * You should not need to call this constructor.
      *
-     * @param telegramLogin The main instance
+     * @param telegramLogin Main class instance.
      * @see TelegramLogin#getDatabase()
      */
     public Database(TelegramLogin telegramLogin) {
